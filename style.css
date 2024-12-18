@@ -31,24 +31,18 @@ td {
     color: white;
 }
 
-/* Entferne äußere Borders */
-
-/* Obere Reihe */
 tr:first-child td {
     border-top: none;
 }
 
-/* Untere Reihe */
 tr:last-child td {
     border-bottom: none;
 }
 
-/* Erste Spalte */
 tr td:first-child {
     border-left: none;
 }
 
-/* Letzte Spalte */
 tr td:last-child {
     border-right: none;
 }
