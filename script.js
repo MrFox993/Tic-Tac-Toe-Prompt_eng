@@ -19,6 +19,7 @@ function renderTable() {
         </table>
     `;
     document.getElementById('content').innerHTML = tableHTML;
+    updateCurrentPlayerDisplay();
 }
 
 function handleClick(index) {
@@ -52,6 +53,24 @@ function handleClick(index) {
     }
 
     currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
+    updateCurrentPlayerDisplay();
+}
+
+function updateCurrentPlayerDisplay() {
+    const playerDisplay = document.getElementById('player-display');
+    playerDisplay.innerHTML = `
+        <div class="player ${currentPlayer === 'circle' ? 'active' : 'inactive'}">
+            <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" stroke="#00B0EF" fill="none" stroke-width="5" />
+            </svg>
+        </div>
+        <div class="player ${currentPlayer === 'cross' ? 'active' : 'inactive'}">
+            <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <line x1="20" y1="20" x2="80" y2="80" stroke="#FFC000" stroke-width="5" />
+                <line x1="80" y1="20" x2="20" y2="80" stroke="#FFC000" stroke-width="5" />
+            </svg>
+        </div>
+    `;
 }
 
 function generateAnimatedCircle() {
