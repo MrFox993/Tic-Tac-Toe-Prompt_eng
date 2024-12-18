@@ -1,0 +1,54 @@
+body {
+    background-color: #323232;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#content {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 24px;
+    border: 5px solid white;
+    background-color: #424242;
+    cursor: pointer;
+    color: white;
+}
+
+/* Entferne äußere Borders */
+
+/* Obere Reihe */
+tr:first-child td {
+    border-top: none;
+}
+
+/* Untere Reihe */
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Erste Spalte */
+tr td:first-child {
+    border-left: none;
+}
+
+/* Letzte Spalte */
+tr td:last-child {
+    border-right: none;
+}
