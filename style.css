@@ -118,6 +118,7 @@ tr td:last-child {
     height: 30px;
     background-color: white;
     margin-right: 4px;
+    display: inline-block;
 }
 
 .diagonal {
@@ -127,4 +128,22 @@ tr td:last-child {
     position: absolute;
     top: 13px;
     left: -7px;
+}
+
+.diagonal-5 {
+    top: 28px;
+    left: 15px;
+    transform: rotate(-36deg);
+}
+
+.diagonal-10 {
+    top: 43px;
+    left: 37px;
+    transform: rotate(36deg);
+}
+
+.diagonal-15 {
+    top: 58px;
+    left: 60px;
+    transform: rotate(-36deg);
 }

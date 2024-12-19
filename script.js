@@ -189,9 +189,11 @@ function generateWinsStripes(wins) {
     for (let i = 0; i < wins; i++) {
         stripes += '<div class="win-stripe"></div>';
     }
-    if (wins >= 5) {
-        stripes += '<div class="win-stripe diagonal"></div>';
+
+    for (let i = 5; i <= wins; i += 5) {
+        stripes += `<div class="win-stripe diagonal diagonal-${i}"></div>`;
     }
+
     return stripes;
 }
 
