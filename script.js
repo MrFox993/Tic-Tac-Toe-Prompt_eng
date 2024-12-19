@@ -72,18 +72,50 @@ function drawWinningLine(combination) {
     const rectC = cellC.getBoundingClientRect();
     const contentRect = content.getBoundingClientRect();
 
-    const x1 = rectA.left - contentRect.left + rectA.width / 2;
-    const y1 = rectA.top - contentRect.top + rectA.height / 2;
-    const x2 = rectC.left - contentRect.left + rectC.width / 2;
-    const y2 = rectC.top - contentRect.top + rectC.height / 2;
+    let startX = rectA.left - contentRect.left;
+    let startY = rectA.top - contentRect.top;
+    let endX = rectC.left - contentRect.left + rectC.width;
+    let endY = rectC.top - contentRect.top + rectC.height;
 
-    const lineLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+    const isHorizontal = startY === endY - rectC.height;
+    const isVertical = startX === endX - rectC.width;
 
-    line.style.width = lineLength + 'px';
-    line.style.transform = `rotate(${angle}deg)`;
-    line.style.left = `${x1}px`;
-    line.style.top = `${y1}px`;
+    if (isHorizontal) {
+        startX += 16; // Kürze am Anfang
+        endX -= 16;   // Kürze am Ende
+        line.style.width = `${Math.abs(endX - startX)}px`;
+        line.style.height = '5px';
+        line.style.left = `${startX}px`;
+        line.style.top = `${startY + rectA.height / 2}px`;
+        line.style.transform = 'rotate(0deg)';
+    } else if (isVertical) {
+        startY += 16; // Kürze am Anfang
+        endY -= 16;   // Kürze am Ende
+        line.style.width = '5px';
+        line.style.height = `${Math.abs(endY - startY)}px`;
+        line.style.left = `${startX + rectA.width / 2}px`;
+        line.style.top = `${startY}px`;
+        line.style.transform = 'rotate(0deg)';
+    } else {
+        const totalLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+        const angle = Math.atan2(endY - startY, endX - startX);
+
+        // Kürze die Linie um 16px an beiden Enden
+        const shortenedLength = totalLength - 32; // Kürzen um 16px * 2
+        const offsetX = 16 * Math.cos(angle); // X-Offset für Verkürzung
+        const offsetY = 16 * Math.sin(angle); // Y-Offset für Verkürzung
+
+        startX += offsetX;
+        startY += offsetY;
+        endX -= offsetX;
+        endY -= offsetY;
+
+        line.style.width = `${shortenedLength}px`;
+        line.style.height = '5px';
+        line.style.left = `${startX}px`;
+        line.style.top = `${startY}px`;
+        line.style.transform = `rotate(${angle * (180 / Math.PI)}deg)`;
+    }
 
     content.appendChild(line);
 }
