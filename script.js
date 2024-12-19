@@ -1,18 +1,17 @@
 let currentPlayer = 'circle';
 let gameEnded = false;
+const playerDisplay = document.getElementById('player-display');
 
 function init() {
-  renderTable();
+    fields = Array(9).fill(null);
+    currentPlayer = 'circle';
+    updatePlayerDisplay();
+    renderTable();
 }
 
 function renderTable() {
     const content = document.getElementById('content');
-    content.innerHTML = `
-        <div id="player-display">
-            <div class="player ${currentPlayer === 'circle' ? 'active' : ''}">${generateCircleSVG()}</div>
-            <div class="player ${currentPlayer === 'cross' ? 'active' : ''}">${generateCrossSVG()}</div>
-        </div>
-    `;
+    content.innerHTML = "";
     const table = document.createElement('table');
     table.innerHTML = `
         ${[0, 1, 2].map(row => `
@@ -55,9 +54,9 @@ function updatePlayerDisplay() {
     `;
 }
 
+
 function updateCurrentPlayerDisplay() {
-    const playerDisplay = document.getElementById('player-display');
-    playerDisplay.innerHTML = getUpdatePlayerHTMLTemplate ();
+    updatePlayerDisplay();
 }
 
 function checkWinner() {
