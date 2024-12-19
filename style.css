@@ -62,9 +62,12 @@ tr td:last-child {
 }
 
 .player {
-    margin: 0 10px;
+    margin: 0 20px;
     opacity: 0.25;
     transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .player.active {
@@ -102,19 +105,26 @@ tr td:last-child {
 }
 
 .score {
-    margin-top: 10px;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    margin-top: 10px;
+    position: relative;
 }
+
 .win-stripe {
-    width: 30px;
-    height: 5px;
-    background-color: #FFC000;
-    margin-bottom: 20px;
-    transform: rotate(90deg);
+    width: 5px;
+    height: 30px;
+    background-color: white;
+    margin-right: 4px;
 }
+
 .diagonal {
-    transform: rotate(45deg);
-    margin-top: -5px;
+    transform: rotate(36deg);
+    width: 55px;
+    height: 5px;
+    position: absolute;
+    top: 13px;
+    left: -7px;
 }
