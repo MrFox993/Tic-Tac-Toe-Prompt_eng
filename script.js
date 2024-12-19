@@ -158,6 +158,13 @@ function checkGameOver() {
         gameEnded = true;
         displayRestartButton("It's a Draw!");
     }
+    if (circleWins >= 15) {
+        gameEnded = true;
+        displayRestartButton("Circle Wins! Game Over. Restart to reset scoreboard.");
+    } else if (crossWins >= 15) {
+        gameEnded = true;
+        displayRestartButton("Cross Wins! Game Over. Restart to reset scoreboard.");
+    }
 }
 
 function displayRestartButton(message) {
@@ -176,34 +183,46 @@ function displayRestartButton(message) {
 function restartGame() {
     fields = Array(9).fill(null);
     gameEnded = false;
+    
     const content = document.getElementById('content');
     const restartContainer = document.getElementById('restart-container');
     if (restartContainer) {
         content.removeChild(restartContainer);
     }
+
     renderTable();
+    updatePlayerDisplay();
 }
 
 function generateWinsStripes(wins) {
     let stripes = '';
     for (let i = 0; i < wins; i++) {
-        stripes += '<div class="win-stripe"></div>';
-    }
-
-    for (let i = 5; i <= wins; i += 5) {
-        stripes += `<div class="win-stripe diagonal diagonal-${i}"></div>`;
+        if (wins >= 5 && (i + 1) % 5 === 0) {  
+            stripes += '<div class="win-stripe diagonal"></div>';
+        } else {
+            stripes += '<div class="win-stripe"></div>';
+        }
     }
 
     return stripes;
 }
 
+
 function handleWin(winner) {
     if (winner === 'circle') {
         circleWins++;
-        circleScore++;
+        if (circleWins >= 15) {
+            gameEnded = true;
+            displayRestartButton("Circle Wins! Game Over. Restart to reset scoreboard.");
+            return;
+        }
     } else if (winner === 'cross') {
         crossWins++;
-        crossScore++;
+        if (crossWins >= 15) {
+            gameEnded = true;
+            displayRestartButton("Cross Wins! Game Over. Restart to reset scoreboard.");
+            return;
+        }
     }
     updatePlayerDisplay();
 }
