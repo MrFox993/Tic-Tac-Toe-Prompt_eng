@@ -100,3 +100,21 @@ tr td:last-child {
 #restart-container button:hover {
     background-color: #008ECF;
 }
+
+.score {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.win-stripe {
+    width: 30px;
+    height: 5px;
+    background-color: #FFC000;
+    margin-bottom: 20px;
+    transform: rotate(90deg);
+}
+.diagonal {
+    transform: rotate(45deg);
+    margin-top: -5px;
+}

@@ -1,5 +1,9 @@
 let currentPlayer = 'circle';
 let gameEnded = false;
+let circleScore = 0;
+let crossScore = 0;
+let circleWins = 0;
+let crossWins = 0;
 const playerDisplay = document.getElementById('player-display');
 
 function init() {
@@ -49,8 +53,18 @@ function updateCell(index) {
 function updatePlayerDisplay() {
     const playerDisplay = document.getElementById('player-display');
     playerDisplay.innerHTML = `
-        <div class="player ${currentPlayer === 'circle' ? 'active' : ''}">${generateCircleSVG()}</div>
-        <div class="player ${currentPlayer === 'cross' ? 'active' : ''}">${generateCrossSVG()}</div>
+        <div class="player ${currentPlayer === 'circle' ? 'active' : ''}">
+            ${generateCircleSVG()}
+            <div class="score">
+                ${generateWinsStripes(circleWins)}
+            </div>
+        </div>
+        <div class="player ${currentPlayer === 'cross' ? 'active' : ''}">
+            ${generateCrossSVG()}
+            <div class="score">
+                ${generateWinsStripes(crossWins)}
+            </div>
+        </div>
     `;
 }
 
@@ -63,8 +77,10 @@ function checkWinner() {
     for (const combination of winningCombinations) {
         const [a, b, c] = combination;
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            const winner = fields[a]; 
+            handleWin(winner);
             return {
-                player: fields[a],
+                player: winner,
                 combination: combination
             };
         }
@@ -159,7 +175,6 @@ function displayRestartButton(message) {
 
 function restartGame() {
     fields = Array(9).fill(null);
-    currentPlayer = 'circle';
     gameEnded = false;
     const content = document.getElementById('content');
     const restartContainer = document.getElementById('restart-container');
@@ -167,4 +182,26 @@ function restartGame() {
         content.removeChild(restartContainer);
     }
     renderTable();
+}
+
+function generateWinsStripes(wins) {
+    let stripes = '';
+    for (let i = 0; i < wins; i++) {
+        stripes += '<div class="win-stripe"></div>';
+    }
+    if (wins >= 5) {
+        stripes += '<div class="win-stripe diagonal"></div>';
+    }
+    return stripes;
+}
+
+function handleWin(winner) {
+    if (winner === 'circle') {
+        circleWins++;
+        circleScore++;
+    } else if (winner === 'cross') {
+        crossWins++;
+        crossScore++;
+    }
+    updatePlayerDisplay();
 }
