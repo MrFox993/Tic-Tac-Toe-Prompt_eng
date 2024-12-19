@@ -137,10 +137,10 @@ function checkGameOver() {
     if (winner) {
         gameEnded = true;
         drawWinningLine(winner.combination);
-        displayRestartButton(`${winner.player === 'circle' ? 'Circle' : 'Cross'} Wins! Restart Game`);
+        displayRestartButton(`${winner.player === 'circle' ? 'Circle' : 'Cross'} Wins!`);
     } else if (isDraw) {
         gameEnded = true;
-        displayRestartButton("It's a Draw! Restart Game");
+        displayRestartButton("It's a Draw!");
     }
 }
 
