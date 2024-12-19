@@ -1,4 +1,4 @@
-function generateAnimatedCross() {
+function generateCrossSVG() {
     return `
         <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <!-- Linie von links oben nach rechts unten -->
@@ -42,7 +42,7 @@ function generateAnimatedCross() {
     `;
 }
 
-function generateAnimatedCircle() {
+function generateCircleSVG() {
     return `
         <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle
