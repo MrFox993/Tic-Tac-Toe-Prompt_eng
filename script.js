@@ -23,33 +23,20 @@ function renderTable() {
 }
 
 function handleClick(index) {
-    if (fields[index] !== null) return;
+    if (fields[index] !== null || checkWinner()) return;
 
     const currentSymbol = currentPlayer === 'circle' ? 'circle' : 'cross';
     fields[index] = currentSymbol;
 
     const cell = document.querySelector(`#cell-${index}`);
     if (currentSymbol === 'circle') {
-        cell.innerHTML = `
-            <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="40" stroke="#00B0EF" fill="none" stroke-width="5">
-                    <animate attributeName="stroke-dasharray" from="0" to="251.2" dur="0.5s" fill="freeze" />
-                </circle>
-            </svg>
-        `;
+        cell.innerHTML = generateAnimatedCircle();
     } else if (currentSymbol === 'cross') {
-        cell.innerHTML = `
-            <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <line x1="20" y1="20" x2="80" y2="80" stroke="#FFC000" stroke-width="5"
-                      stroke-dasharray="84.85" stroke-dashoffset="84.85">
-                    <animate attributeName="stroke-dashoffset" from="84.85" to="0" dur="0.5s" fill="freeze" />
-                </line>
-                <line x1="80" y1="20" x2="20" y2="80" stroke="#FFC000" stroke-width="5"
-                      stroke-dasharray="84.85" stroke-dashoffset="84.85">
-                    <animate attributeName="stroke-dashoffset" from="84.85" to="0" dur="0.5s" fill="freeze" />
-                </line>
-            </svg>
-        `;
+        cell.innerHTML = generateAnimatedCross();
+    }
+
+    if (checkWinner()) {
+        return;
     }
 
     currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
@@ -58,86 +45,45 @@ function handleClick(index) {
 
 function updateCurrentPlayerDisplay() {
     const playerDisplay = document.getElementById('player-display');
-    playerDisplay.innerHTML = `
-        <div class="player ${currentPlayer === 'circle' ? 'active' : 'inactive'}">
-            <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="40" stroke="#00B0EF" fill="none" stroke-width="5" />
-            </svg>
-        </div>
-        <div class="player ${currentPlayer === 'cross' ? 'active' : 'inactive'}">
-            <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <line x1="20" y1="20" x2="80" y2="80" stroke="#FFC000" stroke-width="5" />
-                <line x1="80" y1="20" x2="20" y2="80" stroke="#FFC000" stroke-width="5" />
-            </svg>
-        </div>
-    `;
+    playerDisplay.innerHTML = getUpdatePlayerHTMLTemplate ();
 }
 
-function generateAnimatedCircle() {
-    return `
-        <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle
-                cx="50"
-                cy="50"
-                r="40"
-                stroke="#00B0EF"
-                fill="none"
-                stroke-width="5"
-                stroke-dasharray="251.2"
-                stroke-dashoffset="251.2"
-            >
-                <animate
-                    attributeName="stroke-dashoffset"
-                    from="251.2"
-                    to="0"
-                    dur="0.25s"
-                    fill="freeze"
-                />
-            </circle>
-        </svg>
-    `;
+function checkWinner() {
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+
+        if (fields[a] !== null && fields[a] === fields[b] && fields[a] === fields[c]) {
+            drawWinningLine(combination);
+            return true;
+        }
+    }
+    return false;
 }
 
-function generateAnimatedCross() {
-    return `
-        <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <!-- Linie von links oben nach rechts unten -->
-            <line 
-                x1="20" 
-                y1="20" 
-                x2="80" 
-                y2="80" 
-                stroke="#FFC000" 
-                stroke-width="5" 
-                stroke-dasharray="84.85" 
-                stroke-dashoffset="84.85">
-                <animate
-                    attributeName="stroke-dashoffset"
-                    from="84.85"
-                    to="0"
-                    dur="0.25s"
-                    fill="freeze"
-                />
-            </line>
-            <!-- Linie von rechts oben nach links unten -->
-            <line 
-                x1="80" 
-                y1="20" 
-                x2="20" 
-                y2="80" 
-                stroke="#FFC000" 
-                stroke-width="5" 
-                stroke-dasharray="84.85" 
-                stroke-dashoffset="84.85">
-                <animate
-                    attributeName="stroke-dashoffset"
-                    from="84.85"
-                    to="0"
-                    dur="0.25s"
-                    begin="0s"
-                    fill="freeze"
-                />
-            </line>
-        </svg>
-    `;
+function drawWinningLine(combination) {
+    const content = document.getElementById('content');
+    const line = document.createElement('div');
+    line.classList.add('winning-line');
+
+    const cellA = document.querySelector(`#cell-${combination[0]}`);
+    const cellC = document.querySelector(`#cell-${combination[2]}`);
+
+    const rectA = cellA.getBoundingClientRect();
+    const rectC = cellC.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+
+    const x1 = rectA.left - contentRect.left + rectA.width / 2;
+    const y1 = rectA.top - contentRect.top + rectA.height / 2;
+    const x2 = rectC.left - contentRect.left + rectC.width / 2;
+    const y2 = rectC.top - contentRect.top + rectC.height / 2;
+
+    const lineLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+    line.style.width = lineLength + 'px';
+    line.style.transform = `rotate(${angle}deg)`;
+    line.style.left = `${x1}px`;
+    line.style.top = `${y1}px`;
+
+    content.appendChild(line);
 }
